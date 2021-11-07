@@ -1,0 +1,11 @@
+# binaries
+*.exe
+*.exe~
+
+/bin
+
+# test binary
+*.test
+
+# env files
+*.env
