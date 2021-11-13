@@ -1,0 +1,8 @@
+CREATE TABLE user (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	username VARCHAR(30) NOT NULL UNIQUE,
+	password VARCHAR(30) NOT NULL,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	id_user_role INT NOT NULL DEFAULT 0,
+	CONSTRAINT fk_user_role FOREIGN KEY (id_user_role) REFERENCES user_role(id)
+);
