@@ -1,0 +1,34 @@
+@PORT=8080
+@HOST=localhost
+@URL=http://{{HOST}}:{{PORT}}
+
+### /login with valid credencials
+POST {{URL}}/user/login
+Content-Type: application/json
+
+{
+	"username": "encryptor_test",
+	"password": "encryptor_test"
+}
+
+### /login with wrong password
+POST {{URL}}/user/login
+Content-Type: application/json
+
+{
+	"username": "encryptor_test",
+	"password": "wrong password"
+}
+
+### /login with no body content
+POST {{URL}}/user/login
+Content-Type: application/json
+
+### /login with empty fields
+POST {{URL}}/user/login
+Content-Type: application/json
+
+{
+	"username": "",
+	"password": ""
+}
