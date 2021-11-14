@@ -2,8 +2,11 @@ package application
 
 import (
 	"errors"
+	"strconv"
+	"time"
 
 	"github.com/chars-mc/encryptor-api/internal/user/domain"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type UserService struct {
@@ -27,12 +30,25 @@ func (s *UserService) Login(user UserLoginRequest) (*UserResponse, error) {
 		return nil, errors.New("Wrong password")
 	}
 
-	// TODO: generate a valid token
+	claims := &Claims{
+		Role: u.Role.String(),
+		StandardClaims: jwt.StandardClaims{
+			Id:        strconv.Itoa(u.ID),
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(secretKey)
+	if err != nil {
+		// TODO: handle the return error
+		return nil, err
+	}
+
 	response := &UserResponse{
 		ID:       u.ID,
 		Username: u.Username,
 		Role:     u.Role.String(),
-		Token:    "token",
+		Token:    tokenString,
 	}
 
 	return response, nil

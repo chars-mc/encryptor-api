@@ -1,8 +1,14 @@
 package application
 
-import "errors"
+import (
+	"errors"
+	"os"
+
+	"github.com/golang-jwt/jwt/v4"
+)
 
 var (
+	secretKey                  = []byte(os.Getenv("SECRET_KEY"))
 	errUsernameOrPasswordEmpty = errors.New("The username and password cannot be empty")
 )
 
@@ -23,4 +29,9 @@ type UserResponse struct {
 	Username string `json:"username"`
 	Role     string `json:"role"`
 	Token    string `json:"token"`
+}
+
+type Claims struct {
+	Role string `json:"role"`
+	jwt.StandardClaims
 }
