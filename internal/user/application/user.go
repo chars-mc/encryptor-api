@@ -8,12 +8,13 @@ import (
 )
 
 var (
-	secretKey                  = []byte(os.Getenv("SECRET_KEY"))
-	errUsernameOrPasswordEmpty = errors.New("The username and password cannot be empty")
-	errUsernameLenght          = errors.New("The username length must be between 10 and 30 characters")
-	errPasswordLenght          = errors.New("The password length must be between 10 and 30 characters")
-	errUserRoleDoesNotExists   = errors.New("The user role doesn't exists")
-	errUserAlreadyExists       = errors.New("The user already exists")
+	secretKey                      = []byte(os.Getenv("SECRET_KEY"))
+	errUsernameOrPasswordEmpty     = errors.New("The username and password cannot be empty")
+	errUsernameLenght              = errors.New("The username length must be between 10 and 30 characters")
+	errPasswordLenght              = errors.New("The password length must be between 10 and 30 characters")
+	errUserRoleDoesNotExists       = errors.New("The user role doesn't exists")
+	errUserAlreadyExists           = errors.New("The user already exists")
+	errCannotGenereateHashPassword = errors.New("Cannot generate hash password")
 )
 
 type UserLoginRequest struct {

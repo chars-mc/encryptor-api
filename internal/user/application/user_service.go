@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/chars-mc/encryptor-api/internal/api/security"
 	"github.com/chars-mc/encryptor-api/internal/user/domain"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -25,8 +26,7 @@ func (s *UserService) Login(user UserLoginRequest) (*UserResponse, error) {
 		return nil, err
 	}
 
-	// TODO: use an encrypted password
-	if user.Password != u.Password {
+	if !security.CheckPasswordHash(user.Password, u.Password) {
 		return nil, errors.New("Wrong password")
 	}
 
@@ -53,13 +53,17 @@ func (s *UserService) SignUp(newUser UserSignUpRequest) (*UserResponse, error) {
 		return nil, errUserAlreadyExists
 	}
 
+	passwordHash, err := security.HashPassword(newUser.Password)
+	if err != nil {
+		return nil, errCannotGenereateHashPassword
+	}
 	user := domain.User{
 		Username: newUser.Username,
-		Password: newUser.Password,
+		Password: passwordHash,
 		Role:     domain.Role(newUser.Role),
 	}
 
-	_, err := s.repository.Save(user)
+	_, err = s.repository.Save(user)
 	if err != nil {
 		return nil, err
 	}

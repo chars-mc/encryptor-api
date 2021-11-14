@@ -37,8 +37,8 @@ POST {{URL}}/user/signup
 Content-Type: application/json
 
 {
-	"username": "New encryptor",
-	"password": "new_encryptor_user",
+	"username": "encryptor_test",
+	"password": "encryptor_test",
   "role": 1
 }
 
@@ -47,7 +47,7 @@ POST {{URL}}/user/signup
 Content-Type: application/json
 
 {
-	"username": "New decryptor",
-	"password": "new_decryptor_user",
+	"username": "decryptor_test",
+	"password": "decryptor_test",
   "role": 2
 }
