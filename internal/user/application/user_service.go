@@ -30,15 +30,7 @@ func (s *UserService) Login(user UserLoginRequest) (*UserResponse, error) {
 		return nil, errors.New("Wrong password")
 	}
 
-	claims := &Claims{
-		Role: u.Role.String(),
-		StandardClaims: jwt.StandardClaims{
-			Id:        strconv.Itoa(u.ID),
-			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(secretKey)
+	token, err := GenerateToken(u)
 	if err != nil {
 		// TODO: handle the return error
 		return nil, err
@@ -48,8 +40,57 @@ func (s *UserService) Login(user UserLoginRequest) (*UserResponse, error) {
 		ID:       u.ID,
 		Username: u.Username,
 		Role:     u.Role.String(),
-		Token:    tokenString,
+		Token:    token,
 	}
 
 	return response, nil
+}
+
+func (s *UserService) SignUp(newUser UserSignUpRequest) (*UserResponse, error) {
+	// check if the user already exists
+	userExists, _ := s.repository.FetchByUsername(newUser.Username)
+	if userExists != nil {
+		return nil, errUserAlreadyExists
+	}
+
+	user := domain.User{
+		Username: newUser.Username,
+		Password: newUser.Password,
+		Role:     domain.Role(newUser.Role),
+	}
+
+	_, err := s.repository.Save(user)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := s.repository.FetchByUsername(newUser.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := GenerateToken(u)
+	if err != nil {
+		// TODO: handle the return error
+		return nil, err
+	}
+	response := &UserResponse{
+		ID:       u.ID,
+		Username: u.Username,
+		Role:     u.Role.String(),
+		Token:    token,
+	}
+	return response, nil
+}
+
+func GenerateToken(u *domain.User) (string, error) {
+	claims := &Claims{
+		Role: u.Role.String(),
+		StandardClaims: jwt.StandardClaims{
+			Id:        strconv.Itoa(u.ID),
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(secretKey)
 }

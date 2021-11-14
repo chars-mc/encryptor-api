@@ -1,0 +1,53 @@
+@PORT=8080
+@HOST=localhost
+@URL=http://{{HOST}}:{{PORT}}
+
+### signup with existing user
+POST {{URL}}/user/signup
+Content-Type: application/json
+
+{
+	"username": "encryptor_test",
+	"password": "user_password",
+  "role": 1
+}
+
+### signup with empty fields
+POST {{URL}}/user/signup
+Content-Type: application/json
+
+{
+	"username": "",
+	"password": "",
+  "role": 0
+}
+
+### signup with wrong role
+POST {{URL}}/user/signup
+Content-Type: application/json
+
+{
+	"username": "wrong role",
+	"password": "NewUserPassword",
+  "role": 0
+}
+
+### signup with correct fields
+POST {{URL}}/user/signup
+Content-Type: application/json
+
+{
+	"username": "New encryptor",
+	"password": "new_encryptor_user",
+  "role": 1
+}
+
+### signup with correct fields
+POST {{URL}}/user/signup
+Content-Type: application/json
+
+{
+	"username": "New decryptor",
+	"password": "new_decryptor_user",
+  "role": 2
+}

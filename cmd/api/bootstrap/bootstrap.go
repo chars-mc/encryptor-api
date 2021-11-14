@@ -46,6 +46,7 @@ func Start() error {
 			w.Write([]byte("hello world"))
 		}),
 		router.NewRoute("/user/login", http.MethodPost, userHandler.LoginHandler),
+		router.NewRoute("/user/signup", http.MethodPost, userHandler.SignUpHandler),
 	}
 	router := router.NewRouter(routes)
 

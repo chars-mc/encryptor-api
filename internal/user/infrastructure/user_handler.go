@@ -47,3 +47,31 @@ func (h *UserHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	server.WriteJSON(w, http.StatusOK, response)
 	return
 }
+
+func (h *UserHandler) SignUpHandler(w http.ResponseWriter, r *http.Request) {
+	userSignUpRequest := application.UserSignUpRequest{}
+	err := json.NewDecoder(r.Body).Decode(&userSignUpRequest)
+	defer r.Body.Close()
+
+	if err != nil {
+		server.WriteErrorJSON(w, http.StatusInternalServerError, errors.New("Internal server error"))
+		return
+	}
+
+	err = userSignUpRequest.Verify()
+	if err != nil {
+		server.WriteErrorJSON(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := h.service.SignUp(userSignUpRequest)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			server.WriteErrorJSON(w, http.StatusInternalServerError, errors.New("Internal server error, cannot create the user"))
+			return
+		}
+		server.WriteErrorJSON(w, http.StatusBadRequest, err)
+		return
+	}
+	server.WriteJSON(w, http.StatusOK, response)
+}

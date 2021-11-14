@@ -25,3 +25,15 @@ func (r *UserMySQLRepository) FetchByUsername(username string) (*domain.User, er
 	}
 	return user, nil
 }
+
+func (r *UserMySQLRepository) Save(newUser domain.User) (int64, error) {
+	query := `
+		INSERT INTO user(username, password, id_user_role)
+		VALUES(?, ?, ?);
+	`
+	result, err := r.db.Exec(query, newUser.Username, newUser.Password, newUser.Role)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
+}
