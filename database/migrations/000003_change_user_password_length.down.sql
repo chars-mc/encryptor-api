@@ -1,0 +1,2 @@
+ALTER TABLE user
+MODIFY password VARCHAR(30) NOT NULL;
