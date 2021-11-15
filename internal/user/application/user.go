@@ -2,13 +2,11 @@ package application
 
 import (
 	"errors"
-	"os"
 
 	"github.com/golang-jwt/jwt/v4"
 )
 
 var (
-	secretKey                      = []byte(os.Getenv("SECRET_KEY"))
 	errUsernameOrPasswordEmpty     = errors.New("The username and password cannot be empty")
 	errUsernameLenght              = errors.New("The username length must be between 10 and 30 characters")
 	errPasswordLenght              = errors.New("The password length must be between 10 and 30 characters")

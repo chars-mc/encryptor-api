@@ -30,7 +30,14 @@ func (s *UserService) Login(user UserLoginRequest) (*UserResponse, error) {
 		return nil, errors.New("Wrong password")
 	}
 
-	token, err := GenerateToken(u)
+	claims := &Claims{
+		Role: u.Role.String(),
+		StandardClaims: jwt.StandardClaims{
+			Id:        strconv.Itoa(u.ID),
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		},
+	}
+	token, err := security.GenerateToken(claims)
 	if err != nil {
 		// TODO: handle the return error
 		return nil, err
@@ -73,7 +80,14 @@ func (s *UserService) SignUp(newUser UserSignUpRequest) (*UserResponse, error) {
 		return nil, err
 	}
 
-	token, err := GenerateToken(u)
+	claims := &Claims{
+		Role: u.Role.String(),
+		StandardClaims: jwt.StandardClaims{
+			Id:        strconv.Itoa(u.ID),
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		},
+	}
+	token, err := security.GenerateToken(claims)
 	if err != nil {
 		// TODO: handle the return error
 		return nil, err
@@ -85,16 +99,4 @@ func (s *UserService) SignUp(newUser UserSignUpRequest) (*UserResponse, error) {
 		Token:    token,
 	}
 	return response, nil
-}
-
-func GenerateToken(u *domain.User) (string, error) {
-	claims := &Claims{
-		Role: u.Role.String(),
-		StandardClaims: jwt.StandardClaims{
-			Id:        strconv.Itoa(u.ID),
-			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(secretKey)
 }
