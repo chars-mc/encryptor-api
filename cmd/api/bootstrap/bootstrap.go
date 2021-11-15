@@ -12,6 +12,8 @@ import (
 	"github.com/chars-mc/encryptor-api/internal/database"
 	"github.com/joho/godotenv"
 
+	dataApplication "github.com/chars-mc/encryptor-api/internal/encryption/application"
+	dataInfra "github.com/chars-mc/encryptor-api/internal/encryption/infrastructure"
 	userApplication "github.com/chars-mc/encryptor-api/internal/user/application"
 	userInfra "github.com/chars-mc/encryptor-api/internal/user/infrastructure"
 )
@@ -40,6 +42,10 @@ func Start() error {
 	userService := userApplication.NewUserService(userRepository)
 	userHandler := userInfra.NewUserHandler(userService)
 
+	dataRepository := dataInfra.NewDataMySQLRepository(db)
+	dataService := dataApplication.NewDataService(dataRepository)
+	dataHandler := dataInfra.NewDataHandler(dataService)
+
 	// routes
 	routes := &router.Routes{
 		router.NewRoute("/hello", http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
@@ -47,6 +53,7 @@ func Start() error {
 		}),
 		router.NewRoute("/user/login", http.MethodPost, userHandler.LoginHandler),
 		router.NewRoute("/user/signup", http.MethodPost, userHandler.SignUpHandler),
+		router.NewRoute("/encrypt", http.MethodPost, dataHandler.EncryptHandler),
 	}
 	router := router.NewRouter(routes)
 

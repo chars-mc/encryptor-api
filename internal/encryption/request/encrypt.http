@@ -1,0 +1,7 @@
+@PORT=8080
+@HOST=localhost
+@URL=http://{{HOST}}:{{PORT}}
+
+### encrypt
+POST {{URL}}/encrypt
+Content-Type: application/json
