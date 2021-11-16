@@ -1,9 +1,22 @@
 package application
 
+import "errors"
+
+var (
+	errContentLenght = errors.New("The content length must be between 10 and 22 characters")
+)
+
 type DataRequest struct {
 	Content     string `json:"content"`
 	IdDataType  int    `json:"id_data_type"`
 	IdAlgorithm int    `json:"id_algorithm"`
+}
+
+func (d *DataRequest) Verify() error {
+	if len(d.Content) < 10 || len(d.Content) > 22 {
+		return errContentLenght
+	}
+	return nil
 }
 
 type DataResponse struct {

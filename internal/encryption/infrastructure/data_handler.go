@@ -48,6 +48,11 @@ func (h *DataHandler) EncryptHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := dataRequest.Verify(); err != nil {
+		server.WriteErrorJSON(w, http.StatusBadRequest, err)
+		return
+	}
+
 	response, err := h.service.Encrypt(dataRequest, userDetails)
 	if err != nil {
 		if err == sql.ErrNoRows {
