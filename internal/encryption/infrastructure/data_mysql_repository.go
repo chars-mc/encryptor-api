@@ -14,5 +14,13 @@ func NewDataMySQLRepository(db *database.MySQLClient) *DataMySQLRepository {
 }
 
 func (r *DataMySQLRepository) Save(data domain.Data) (int64, error) {
-	return 0, nil
+	query := `
+		INSERT INTO data(content, id_data_type, id_algorithm)
+		VALUES(?, ?, ?);
+	`
+	result, err := r.db.Exec(query, data.Content, data.DataType, data.Algorithm)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
 }

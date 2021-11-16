@@ -1,6 +1,7 @@
 package application
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 
@@ -17,7 +18,7 @@ func NewDataService(repository domain.DataRepository) *DataService {
 }
 
 func (s *DataService) Encrypt(data DataRequest, user UserDetails) (*DataResponse, error) {
-	response := &DataResponse{}
+	dataEncrypted := domain.Data{}
 
 	switch data.IdAlgorithm {
 	case domain.AES:
@@ -25,12 +26,23 @@ func (s *DataService) Encrypt(data DataRequest, user UserDetails) (*DataResponse
 		if err != nil {
 			return nil, err
 		}
-		response.ID = 1
-		response.Content = c
+		dataEncrypted.Content = hex.EncodeToString(c)
+		dataEncrypted.Algorithm = domain.AES
 	case domain.Blowsifh:
 		fmt.Println("Blowfish")
 	default:
 		return nil, errors.New("Cannot encrypt data with the algorithm selected")
+	}
+
+	dataEncrypted.DataType = domain.DataType(data.IdDataType)
+	dataId, err := s.repository.Save(dataEncrypted)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DataResponse{
+		ID:      int(dataId),
+		Content: []byte(dataEncrypted.Content),
 	}
 	return response, nil
 }
