@@ -3,7 +3,6 @@ package application
 import (
 	"encoding/hex"
 	"errors"
-	"fmt"
 
 	"github.com/chars-mc/encryptor-api/internal/api/security"
 	"github.com/chars-mc/encryptor-api/internal/encryption/domain"
@@ -29,7 +28,14 @@ func (s *DataService) Encrypt(data DataRequest, user UserDetails) (*DataResponse
 		dataEncrypted.Content = hex.EncodeToString(c)
 		dataEncrypted.Algorithm = domain.AES
 	case domain.Blowsifh:
-		fmt.Println("Blowfish")
+		byteText := []byte(data.Content)
+		paddedplaintext := security.BlowfishChecksizeAndPad(byteText)
+		c, err := security.BlowfishEncrypt(paddedplaintext)
+		if err != nil {
+			return nil, errors.New("Cannot encrypt data with the algorithm selected")
+		}
+		dataEncrypted.Algorithm = domain.Blowsifh
+		dataEncrypted.Content = hex.EncodeToString(c)
 	default:
 		return nil, errors.New("Cannot encrypt data with the algorithm selected")
 	}

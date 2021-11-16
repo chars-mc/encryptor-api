@@ -8,6 +8,8 @@ import (
 	"io"
 	"log"
 	"os"
+
+	"golang.org/x/crypto/blowfish"
 )
 
 var (
@@ -32,4 +34,28 @@ func AesEncrypt(text []byte) ([]byte, error) {
 		return nil, errDataEncryption
 	}
 	return gcm.Seal(nonce, nonce, text, nil), nil
+}
+
+func BlowfishEncrypt(ppt []byte) ([]byte, error) {
+	key := []byte(os.Getenv("BLOWFISH_SECRET_KEY"))
+	ecipher, err := blowfish.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	ciphertext := make([]byte, blowfish.BlockSize+len(ppt))
+	eiv := ciphertext[:blowfish.BlockSize]
+	ecbc := cipher.NewCBCEncrypter(ecipher, eiv)
+	ecbc.CryptBlocks(ciphertext[blowfish.BlockSize:], ppt)
+	return ciphertext, nil
+}
+
+func BlowfishChecksizeAndPad(pt []byte) []byte {
+	modulus := len(pt) % blowfish.BlockSize
+	if modulus != 0 {
+		padlen := blowfish.BlockSize - modulus
+		for i := 0; i < padlen; i++ {
+			pt = append(pt, 0)
+		}
+	}
+	return pt
 }
