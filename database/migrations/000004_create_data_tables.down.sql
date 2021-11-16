@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS data;
+DROP TABLE IF EXISTS algorithm;
+DROP TABLE IF EXISTS data_type;
