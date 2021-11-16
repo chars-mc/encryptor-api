@@ -1,7 +1,35 @@
 @PORT=8080
 @HOST=localhost
 @URL=http://{{HOST}}:{{PORT}}
+@token=token
 
 ### encrypt
 POST {{URL}}/encrypt
 Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "content": "content to encrypt",
+  "id_data_type": 1,
+  "id_algorithm": 1
+}
+
+### encrypt with no credentials
+POST {{URL}}/encrypt
+Content-Type: application/json
+Authorization: ""
+
+{
+  "content": "content to encrypt",
+  "id_data_type": 1,
+  "id_algorithm": 1
+}
+
+### login
+POST {{URL}}/user/login
+Content-Type: application/json
+
+{
+	"username": "encryptor_test",
+	"password": "encryptor_test"
+}

@@ -11,5 +11,9 @@ func NewDataService(repository domain.DataRepository) *DataService {
 }
 
 func (s *DataService) Encrypt(data DataRequest) (*DataResponse, error) {
-	return nil, nil
+	response := &DataResponse{
+		ID:      1,
+		Content: "encrypted_content",
+	}
+	return response, nil
 }
