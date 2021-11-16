@@ -48,7 +48,7 @@ func (h *DataHandler) EncryptHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := h.service.Encrypt(dataRequest)
+	response, err := h.service.Encrypt(dataRequest, userDetails)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			server.WriteErrorJSON(w, http.StatusNotFound, errors.New("Cannot encrypt file"))

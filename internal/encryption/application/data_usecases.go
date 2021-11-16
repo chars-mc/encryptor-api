@@ -1,5 +1,5 @@
 package application
 
 type DataUseCases interface {
-	Encrypt(data DataRequest) (*DataResponse, error)
+	Encrypt(data DataRequest, user UserDetails) (*DataResponse, error)
 }
