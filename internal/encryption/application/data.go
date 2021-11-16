@@ -3,7 +3,7 @@ package application
 import "errors"
 
 var (
-	errContentLenght = errors.New("The content length must be between 10 and 22 characters")
+	errContentLength = errors.New("The content length must be between 10 and 22 characters")
 )
 
 type DataRequest struct {
@@ -14,7 +14,7 @@ type DataRequest struct {
 
 func (d *DataRequest) Verify() error {
 	if len(d.Content) < 10 || len(d.Content) > 22 {
-		return errContentLenght
+		return errContentLength
 	}
 	return nil
 }

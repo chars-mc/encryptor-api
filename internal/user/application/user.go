@@ -8,8 +8,8 @@ import (
 
 var (
 	errUsernameOrPasswordEmpty     = errors.New("The username and password cannot be empty")
-	errUsernameLenght              = errors.New("The username length must be between 10 and 30 characters")
-	errPasswordLenght              = errors.New("The password length must be between 10 and 30 characters")
+	errUsernameLength              = errors.New("The username length must be between 10 and 30 characters")
+	errPasswordLength              = errors.New("The password length must be between 10 and 30 characters")
 	errUserRoleDoesNotExists       = errors.New("The user role doesn't exists")
 	errUserAlreadyExists           = errors.New("The user already exists")
 	errCannotGenereateHashPassword = errors.New("Cannot generate hash password")
@@ -38,10 +38,10 @@ func (u *UserSignUpRequest) Verify() error {
 		return errUsernameOrPasswordEmpty
 	}
 	if len(u.Username) < 10 || len(u.Username) > 30 {
-		return errUsernameLenght
+		return errUsernameLength
 	}
 	if len(u.Password) < 10 || len(u.Password) > 30 {
-		return errPasswordLenght
+		return errPasswordLength
 	}
 	if u.Role <= 0 || u.Role > 2 {
 		return errUserRoleDoesNotExists
