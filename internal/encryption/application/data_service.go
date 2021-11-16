@@ -42,7 +42,7 @@ func (s *DataService) Encrypt(data DataRequest, user UserDetails) (*DataResponse
 
 	response := &DataResponse{
 		ID:      int(dataId),
-		Content: []byte(dataEncrypted.Content),
+		Content: dataEncrypted.Content,
 	}
 	return response, nil
 }
