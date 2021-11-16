@@ -8,7 +8,7 @@ type DataRequest struct {
 
 type DataResponse struct {
 	ID      int    `json:"id"`
-	Content string `json:"content"`
+	Content []byte `json:"content"`
 }
 
 // UserDetails is used to register the user actions

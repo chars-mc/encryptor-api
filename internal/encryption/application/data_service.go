@@ -1,13 +1,11 @@
 package application
 
 import (
-	"os"
+	"errors"
+	"fmt"
 
+	"github.com/chars-mc/encryptor-api/internal/api/security"
 	"github.com/chars-mc/encryptor-api/internal/encryption/domain"
-)
-
-var (
-	aesSecretKey = []byte(os.Getenv("AES_SECRET_KEY"))
 )
 
 type DataService struct {
@@ -19,9 +17,20 @@ func NewDataService(repository domain.DataRepository) *DataService {
 }
 
 func (s *DataService) Encrypt(data DataRequest, user UserDetails) (*DataResponse, error) {
-	response := &DataResponse{
-		ID:      1,
-		Content: "encrypted_content",
+	response := &DataResponse{}
+
+	switch data.IdAlgorithm {
+	case domain.AES:
+		c, err := security.AesEncrypt([]byte(data.Content))
+		if err != nil {
+			return nil, err
+		}
+		response.ID = 1
+		response.Content = c
+	case domain.Blowsifh:
+		fmt.Println("Blowfish")
+	default:
+		return nil, errors.New("Cannot encrypt data with the algorithm selected")
 	}
 	return response, nil
 }
