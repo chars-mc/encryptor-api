@@ -10,3 +10,9 @@ type DataResponse struct {
 	ID      int    `json:"id"`
 	Content string `json:"content"`
 }
+
+// UserDetails is used to register the user actions
+type UserDetails struct {
+	ID   string `json:"id"`
+	Role string `json:"role"`
+}
