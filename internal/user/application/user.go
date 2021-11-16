@@ -57,6 +57,7 @@ type UserResponse struct {
 }
 
 type Claims struct {
+	ID   string `json:"id"`
 	Role string `json:"role"`
 	jwt.StandardClaims
 }

@@ -31,9 +31,9 @@ func (s *UserService) Login(user UserLoginRequest) (*UserResponse, error) {
 	}
 
 	claims := &Claims{
+		ID:   strconv.Itoa(u.ID),
 		Role: u.Role.String(),
 		StandardClaims: jwt.StandardClaims{
-			Id:        strconv.Itoa(u.ID),
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 		},
 	}
