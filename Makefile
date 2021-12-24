@@ -3,6 +3,11 @@ include .env
 DB_MIGRATION_DIR := database/migrations
 DB_MYSQL_DSN := mysql://${DB_USER}:${DB_PASS}@tcp'('${DB_HOST}:${DB_PORT}')'/${DB_NAME}
 
+# install installs dependencies and tools
+install:
+	go install github.com/githubnemo/CompileDaemon@latest
+	go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.15.0
+
 # run executes the main.go file
 run:
 	go run ./cmd/api/main.go
