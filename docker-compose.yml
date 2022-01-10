@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  db:
+    image: mariadb
+    environment:
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_PASS}
+      - MARIADB_DATABASE=${DB_NAME}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASS}
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: always
