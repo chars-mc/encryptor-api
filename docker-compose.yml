@@ -9,7 +9,7 @@ services:
       - MARIADB_DATABASE=${DB_NAME}
       - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASS}
     volumes:
-      - ./data:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
     ports:
       - 3306:3306
     restart: always
