@@ -44,7 +44,7 @@ func (h *DataHandler) EncryptHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	if err != nil {
-		server.WriteErrorJSON(w, http.StatusInternalServerError, errors.New("Internal server error"))
+		server.WriteErrorJSON(w, http.StatusBadRequest, errors.New("Cannot process the data"))
 		return
 	}
 
